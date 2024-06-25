@@ -1,1 +1,77 @@
 
+from datetime import datetime
+
+def calculate_duration(dob, unit):
+    """
+    Calculate the duration of time a person has lived based on their DOB in a specified unit.
+
+    :param dob: Date of Birth of the person (datetime object)
+    :param unit: Time unit for the calculation (Days, Hours, Minutes, Seconds)
+    :return: The calculated duration in the specified unit
+    """
+    now = datetime.now()
+    delta = now - dob
+    
+    if unit.lower() == 'years':
+        duration = delta.days / 365
+    elif unit.lower() == 'days':
+        duration = delta.days
+    elif unit.lower() == 'hours':
+        duration = delta.days * 24 + delta.seconds / 3600
+    elif unit.lower() == 'minutes':
+        duration = (delta.days * 24 * 60) + (delta.seconds / 60)
+    elif unit.lower() == 'seconds':
+        duration = (delta.days * 24 * 60 * 60) + delta.seconds
+    else:
+        raise ValueError("Invalid time unit selected")
+    
+    return duration
+
+def main():
+    """
+    Main function to interact with the user and calculate the duration of their age in the selected time unit.
+    """
+    while True:
+        dob_input = input("What's your date of birth? (format: YYYY-MM-DD) ")
+        try:
+            dob = datetime.strptime(dob_input, "%Y-%m-%d")
+            if dob > datetime.now():
+                raise ValueError("Date of birth cannot be in the future")
+            break
+        except ValueError as e:
+            print(f"Invalid input: {e}. Please enter a valid date in the format YYYY-MM-DD.")
+    
+    while True:
+        print('''
+Options you can exercise are:
+1) years
+2) Days
+3) Hours
+4) Minutes
+5) Seconds
+6) Exit
+''')
+        option = int(input('Enter your option: '))
+        if option == 1:
+            duration = calculate_duration(dob, 'years')
+            print(f'You have lived for {duration:.0f} years.')
+        elif option == 2:
+            duration = calculate_duration(dob, 'days')
+            print(f'You have lived for {duration:.0f} days.')
+        elif option == 3:
+            duration = calculate_duration(dob, 'hours')
+            print(f'You have lived for {duration:.0f} hours.')
+        elif option == 4:
+            duration = calculate_duration(dob, 'minutes')
+            print(f'You have lived for {duration:.0f} minutes.')
+        elif option == 5:
+            duration = calculate_duration(dob, 'seconds')
+            print(f'You have lived for {duration:.0f} seconds.')
+        elif option == 6:
+            print('Thank you. Goodbye!')
+            break
+        else:
+            print('Invalid option selected. Please try again.')
+
+if _name_ == "_main_":
+    main()
